@@ -99,9 +99,20 @@ app.post('/login', (req, res) => {
 
 
 })
+
 app.get('/register', (req, res) =>{
     res.render('register');
 })
+
+app.get('/secrets', (req, res) => {
+    if (req.isAuthenticated()){
+        res.render('secrets')
+    } else {
+        res.redirect("/login")
+    }
+    
+})
+
 app.post('/register', (req, res) => {
     // bcrypt.hash(req.body.password, saltRounds, function(err, hash){
     //     if (err) {console.log(err);}

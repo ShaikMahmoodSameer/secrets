@@ -29,20 +29,16 @@ app.use(passport.session());
 
 
 // db connection
-const connectDB = async () => {
-    try{
-        // mongodb connection string
-        const con = await mongoose.connect(process.env.MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log(`MongoDB connected : ${con.connection.host}`);
-    }catch(err){
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then((data)=>{
+    console.log(`MongoDB connected :`);
+}).catch((err) => {
         console.log(err);
         process.exit(1);
-    }
-}
-connectDB();
+})
+
 
 // mongoose.set("useCreateIndex", true);
 
@@ -62,6 +58,7 @@ passport.deserializeUser(User.deserializeUser());
 // routes
 app.get('/', (req, res) =>{
     res.render('home');
+    console.log(req.session);
 })
 app.get('/login', (req, res) =>{
     res.render('login');
@@ -129,7 +126,7 @@ app.post('/register', (req, res) => {
     //     }
     // })
 
-    User.register({mobile_number: req.body.m_num}, req.body.password, function(err, user) {
+    User.register({username: req.body.m_num}, req.body.password, function(err, user) {
         if(err){
             console.log(err);
             res.redirect("/register");
